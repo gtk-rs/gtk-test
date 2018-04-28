@@ -11,3 +11,7 @@ gtk = "^0.4.0"
 
 [features]
 default = ["gtk/v3_10"]
+
+[[test]]
+harness = false
+name = "basic"
