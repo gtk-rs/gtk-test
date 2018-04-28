@@ -1,0 +1,13 @@
+[package]
+name = "gtk-test"
+version = "0.1.0"
+authors = ["The Gtk-rs Project Developers"]
+
+[dependencies]
+enigo = "^0.0.11"
+gdk = "^0.8.0"
+glib-sys = "^0.6.0"
+gtk = "^0.4.0"
+
+[features]
+default = ["gtk/v3_10"]
