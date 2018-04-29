@@ -49,6 +49,24 @@ use gtk::{
     Window,
 };
 
+/// To check if the widget's label matches the given string.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Button, ButtonExt, LabelExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let but = Button::new();
+/// but.set_label("text");
+/// assert_label!(but, "text");
+/// # }
+/// ```
 #[macro_export]
 macro_rules! assert_label {
     ($widget:expr, $string:expr) => {
@@ -58,6 +76,23 @@ macro_rules! assert_label {
     };
 }
 
+/// To check if the widget's text matches the given string.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Label, LabelExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let label = Label::new("I'm a label!");
+/// assert_text!(label, "I'm a label!");
+/// # }
+/// ```
 #[macro_export]
 macro_rules! assert_text {
     ($widget:expr, $string:expr) => {
@@ -66,6 +101,34 @@ macro_rules! assert_text {
 }
 
 /// Simulate a click on a widget.
+///
+/// ## Warning!
+///
+/// Please note that the click will "fail" if the window isn't on top of all other windows (this
+/// is a common issue on OSX). Don't forget to bring the button's window on top by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Button, ButtonExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let but = Button::new();
+/// but.connect_clicked(|_| {
+///     println!("clicked");
+/// });
+/// gtk_test::click(&but);
+/// # }
+/// ```
 pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.get_allocation();
@@ -77,12 +140,56 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 }
 
 /// Simulate a double-click on a widget.
+///
+/// ## Warning!
+///
+/// Please note that the double-click will "fail" if the window isn't on top of all other windows
+/// (this is a common issue on OSX). Don't forget to bring the button's window on top by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{FileChooserAction, FileChooserWidget, FileChooserExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let fcw = FileChooserWidget::new(FileChooserAction::Open);
+/// fcw.connect_file_activated(|_| {
+///     println!("double clicked");
+/// });
+/// gtk_test::double_click(&fcw);
+/// # }
+/// ```
 pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     click(widget);
     click(widget);
 }
 
 /// Move the mouse relative to the widget position.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::Button;
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let but = Button::new();
+/// gtk_test::mouse_move(&but, 0, 0); // the mouse will be on the top-left corner of the button
+/// # }
+/// ```
 pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, y: i32) {
     wait_for_draw(widget, || {
         let toplevel_window = widget.get_toplevel().and_then(|toplevel| toplevel.get_window());
@@ -99,6 +206,36 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
     });
 }
 
+/// Send a mouse press event to the given widget.
+///
+/// ## Warning!
+///
+/// Please note that the mouse-press event will "fail" if the window isn't on top of all other
+/// windows (this is a common issue on OSX). Don't forget to bring the button's window on top
+/// by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Entry, EntryExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let entry = Entry::new();
+/// entry.connect_icon_press(|_, _, _| {
+///     println!("pressed");
+/// });
+/// gtk_test::mouse_press(&entry);
+/// # }
+/// ```
 pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.get_allocation();
@@ -109,6 +246,36 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     });
 }
 
+/// Send a mouse release event to the given widget.
+///
+/// ## Warning!
+///
+/// Please note that the mouse-release event will "fail" if the window isn't on top of all other
+/// windows (this is a common issue on OSX). Don't forget to bring the button's window on top
+/// by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Entry, EntryExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let entry = Entry::new();
+/// entry.connect_icon_release(|_, _, _| {
+///     println!("released");
+/// });
+/// gtk_test::mouse_release(&entry);
+/// # }
+/// ```
 pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.get_allocation();
@@ -119,6 +286,37 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     });
 }
 
+/// Send a key event to the given widget.
+///
+/// ## Warning!
+///
+/// Please note that the enter-key event will "fail" if the window isn't on top of all other
+/// windows (this is a common issue on OSX). Don't forget to bring the button's window on top
+/// by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gdk;
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Entry, EntryExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let entry = Entry::new();
+/// entry.connect_preedit_changed(|_, _| {
+///     println!("key entered");
+/// });
+/// gtk_test::enter_key(&entry, gdk::enums::key::Agrave);
+/// # }
+/// ```
 pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
         focus(widget);
@@ -128,6 +326,36 @@ pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
     });
 }
 
+/// Send keys event to the given widget.
+///
+/// ## Warning!
+///
+/// Please note that the enter-key event will "fail" if the window isn't on top of all other
+/// windows (this is a common issue on OSX). Don't forget to bring the button's window on top
+/// by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Entry, EntryExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let entry = Entry::new();
+/// entry.connect_preedit_changed(|_, _| {
+///     println!("key entered");
+/// });
+/// gtk_test::enter_keys(&entry, "A lot of keys!");
+/// # }
+/// ```
 pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, text: &str) {
     wait_for_draw(widget, || {
         focus(widget);
@@ -139,11 +367,57 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
     });
 }
 
+/// Returns the child element which has the given name.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Button, ContainerExt, WidgetExt, Window, WindowType};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let but = Button::new();
+/// let w = Window::new(WindowType::Toplevel);
+///
+/// but.set_name("Button");
+/// w.add(&but);
+///
+/// gtk_test::find_child_by_name::<Button, Window>(&w, "Button").expect("failed to find child");
+/// // Or even better:
+/// let but: Button = gtk_test::find_child_by_name(&w, "Button").expect("failed to find child");
+/// # }
+/// ```
 pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<C> {
     find_widget_by_name(parent, name)
         .and_then(|widget| widget.downcast().ok())
 }
 
+/// Returns the child widget which has the given name.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Button, ContainerExt, WidgetExt, Window, WindowType};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let but = Button::new();
+/// let w = Window::new(WindowType::Toplevel);
+///
+/// but.set_name("Button");
+/// w.add(&but);
+///
+/// gtk_test::find_widget_by_name(&w, "Button").unwrap();
+/// # }
+/// ```
 pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<Widget> {
     if let Ok(container) = parent.clone().dynamic_cast::<Container>() {
         for child in container.get_children() {
@@ -172,6 +446,28 @@ pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, nam
     None
 }
 
+/// Focus on the given widget.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Button, Inhibit, WidgetExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let but = Button::new();
+///
+/// but.connect_focus(|_, _| {
+///     println!("focused!");
+///     Inhibit(false)
+/// });
+/// gtk_test::focus(&but);
+/// # }
+/// ```
 pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         if !widget.has_focus() {
@@ -185,6 +481,38 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     });
 }
 
+/// Send a key press event to the given widget.
+///
+/// ## Warning!
+///
+/// Please note that the key-press event will "fail" if the window isn't on top of all other
+/// windows (this is a common issue on OSX). Don't forget to bring the button's window on top
+/// by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gdk;
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Entry, Inhibit, WidgetExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let entry = Entry::new();
+/// entry.connect_key_press_event(|_, _| {
+///     println!("key pressed");
+///     Inhibit(false)
+/// });
+/// gtk_test::key_press(&entry, gdk::enums::key::Agrave);
+/// # }
+/// ```
 pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
         focus(widget);
@@ -194,6 +522,38 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
     });
 }
 
+/// Send a key release event to the given widget.
+///
+/// ## Warning!
+///
+/// Please note that the key-release event will "fail" if the window isn't on top of all other
+/// windows (this is a common issue on OSX). Don't forget to bring the button's window on top
+/// by using:
+///
+/// ```ignore
+/// window.activate_focus();
+/// ```
+///
+/// Example:
+///
+/// ```
+/// extern crate gdk;
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{Entry, Inhibit, WidgetExt};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let entry = Entry::new();
+/// entry.connect_key_release_event(|_, _| {
+///     println!("key released");
+///     Inhibit(false)
+/// });
+/// gtk_test::key_release(&entry, gdk::enums::key::Agrave);
+/// # }
+/// ```
 pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
         focus(widget);
@@ -204,6 +564,20 @@ pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W,
 }
 
 /// Wait for events the specified amount the milliseconds.
+///
+/// Very convenient when you need GTK to update the UI to let it process some events.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// extern crate gtk_test;
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// gtk_test::wait(1000); // wait for a second
+/// # }
+/// ```
 pub fn wait(ms: u32) {
     gtk::timeout_add(ms, || {
         gtk::main_quit();
@@ -212,6 +586,22 @@ pub fn wait(ms: u32) {
     gtk::main();
 }
 
+/// Process all pending events and then return.
+///
+/// This function is called in all functions related to events handling (like `key_release` for
+/// example).
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// extern crate gtk_test;
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// gtk_test::run_loop();
+/// # }
+/// ```
 pub fn run_loop() {
     unsafe { glib_sys::g_usleep(1000) };
     while gtk::events_pending() {
@@ -219,6 +609,26 @@ pub fn run_loop() {
     }
 }
 
+/// Wait for a widget to be drawn.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// extern crate gtk_test;
+///
+/// use gtk::{WidgetExt, Window, WindowType};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let mut w = Window::new(WindowType::Toplevel);
+///
+/// w.show_all();
+/// gtk_test::wait_for_draw(&w, || {
+///     println!("drawn!");
+/// });
+/// # }
+/// ```
 pub fn wait_for_draw<W, F: FnOnce()>(widget: &W, callback: F)
 where W: IsA<Object> + IsA<Widget> + WidgetExt {
     if widget.get_ancestor(Window::static_type()).is_none() {
