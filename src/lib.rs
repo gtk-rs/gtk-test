@@ -609,6 +609,30 @@ pub fn run_loop() {
     }
 }
 
+/// Wait until the given condition returns `true`.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// extern crate gtk_test;
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let mut x = 0;
+///
+/// gtk_test::wait_until_done(move || {
+///     x += 1;
+///     x > 10
+/// });
+/// # }
+/// ```
+pub fn wait_until_done<F: FnMut() -> bool>(mut f: F) {
+    while !f() {
+        run_loop();
+    }
+}
+
 /// Wait for a widget to be drawn.
 ///
 /// Example:
