@@ -3,6 +3,7 @@ name = "gtk-test"
 version = "0.1.0"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
+description = "Crate to test GTK UIs"
 
 categories = ["api-bindings", "gui", "test"]
 homepage = "http://gtk-rs.org/"
