@@ -1,4 +1,4 @@
-# gtk-test
+# gtk-test ![Build Status](https://travis-ci.org/gtk-rs/gtk-test.png?branch=master)](https://travis-ci.org/gtk-rs/gtk-test) [![Build status](https://ci.appveyor.com/api/projects/status/h72xnw2ghjpy2m9y/branch/master?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk-test/branch/master)
 
 This projects allows you to test your GTK's applications UI. It has to be used with [gtk-rs](https://gtk-rs.org) crates.
 
