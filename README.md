@@ -62,4 +62,30 @@ It allows your test to be run as a "normal" binary.
 
 ### Example?
 
-You can find one in the tests folder. Just copy/paste it and you're good to go (don't forget to add the missing pieces in your `Cargo.toml` file!).
+You can find a few in the tests folder. Just copy/paste it and you're good to go (don't forget to add the missing pieces in your `Cargo.toml` file!).
+
+### Using it on CI?
+
+It's actually possible (only tested for travis though). You "just" need a window manager. Here's what you have to ad in your Ci configuration file to make it work:
+
+Install the following packages:
+
+ * libcurl4-openssl-dev
+ * libelf-dev
+ * libdw-dev
+ * binutils-dev
+ * libsoup2.4-dev
+ * libxtst-dev
+ * at-spi2-core
+ * openbox
+
+Then you to execute the following commands:
+
+```
+> "export DISPLAY=:99.0"
+> "sh -e /etc/init.d/xvfb start"
+> sleep 3 # give xvfb some time to start
+> openbox &
+```
+
+Take a look at our `.travis.yml` file to see how we set things up.
