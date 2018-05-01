@@ -40,6 +40,8 @@ extern crate gdk;
 extern crate gtk;
 
 mod macros;
+
 mod functions;
+mod observer;
 
 pub use functions::*;
