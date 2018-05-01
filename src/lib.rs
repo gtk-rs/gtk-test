@@ -45,3 +45,4 @@ mod functions;
 mod observer;
 
 pub use functions::*;
+pub use observer::Observer;

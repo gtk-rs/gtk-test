@@ -14,3 +14,7 @@ default = ["gtk/v3_10"]
 [[test]]
 harness = false
 name = "basic"
+
+[[test]]
+harness = false
+name = "observer"
