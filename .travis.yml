@@ -22,11 +22,6 @@ addons:
       - at-spi2-core
       - openbox
 
-before_install:
-  - sudo add-apt-repository ppa:webkit-team/ppa -y
-  - sudo apt-get update
-  - sudo apt-get install libwebkit2gtk-4.0-dev -y
-
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
