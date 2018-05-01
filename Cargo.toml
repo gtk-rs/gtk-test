@@ -2,6 +2,17 @@
 name = "gtk-test"
 version = "0.1.0"
 authors = ["The Gtk-rs Project Developers"]
+license = "MIT"
+
+categories = ["api-bindings", "gui", "test"]
+homepage = "http://gtk-rs.org/"
+repository = "https://github.com/gtk-rs/gtk-test"
+keywords = ["gtk", "gtk-rs", "GUI", "test", "gnome"]
+documentation = "https://docs.rs/gtk-test"
+
+[badges]
+appveyor = { repository = "GuillaumeGomez/gtk-test", service = "github" }
+travis-ci = { repository = "gtk-rs/gtk-test" }
 
 [dependencies]
 enigo = "^0.0.11"
