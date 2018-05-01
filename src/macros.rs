@@ -128,8 +128,8 @@ macro_rules! observer_new {
         let observer = $crate::Observer::new();
         let res = (*observer.get_inner()).clone();
         $widget.$signal_name(move |$e1 $(,$e:expr)*| {
-            *res.borrow_mut() = true;
             let _ = $block;
+            *res.borrow_mut() = true;
         });
         observer
     }}
