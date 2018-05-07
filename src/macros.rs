@@ -72,6 +72,31 @@ macro_rules! assert_title {
     };
 }
 
+/// To check if the widget's name matches the given string.
+///
+/// Example:
+///
+/// ```
+/// extern crate gtk;
+/// #[macro_use]
+/// extern crate gtk_test;
+///
+/// use gtk::{WidgetExt, Button};
+///
+/// # fn main() {
+/// gtk::init().expect("GTK init failed");
+/// let button = Button::new();
+/// button.set_name("Omelette");
+/// assert_name!(button, "Omelette");
+/// # }
+/// ```
+#[macro_export]
+macro_rules! assert_name {
+    ($widget:expr, $string:expr) => {
+        assert_eq!($widget.get_name().expect("get text"), $string.to_string());
+    };
+}
+
 /// Create a new observer for signals.
 ///
 /// Example:
