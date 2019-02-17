@@ -17,6 +17,7 @@ addons:
       - libdw-dev
       - binutils-dev
       - libgtk-3-dev
+      - libmount-dev
       - libsoup2.4-dev
       - libxtst-dev
       - at-spi2-core
