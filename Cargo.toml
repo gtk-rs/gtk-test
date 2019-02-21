@@ -1,10 +1,9 @@
 [package]
 name = "gtk-test"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
 description = "Crate to test GTK UIs"
-
 categories = ["api-bindings", "gui", "test"]
 homepage = "http://gtk-rs.org/"
 repository = "https://github.com/gtk-rs/gtk-test"
