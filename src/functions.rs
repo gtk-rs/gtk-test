@@ -7,19 +7,21 @@ use enigo::{
 };
 use gdk::{WindowExt, keyval_to_unicode};
 use gdk::enums::key::{self, Key};
+use glib::{
+    Cast,
+    Continue,
+    IsA,
+    Object,
+    StaticType,
+};
 use gtk::{
     self,
     Bin,
     BinExt,
-    Cast,
     Container,
     ContainerExt,
-    Continue,
     EditableExt,
     Entry,
-    IsA,
-    Object,
-    StaticType,
     Widget,
     WidgetExt,
     Window,
@@ -346,7 +348,7 @@ pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
 pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<Widget> {
     if let Ok(container) = parent.clone().dynamic_cast::<Container>() {
         for child in container.get_children() {
-            if let Some(string) = child.get_name() {
+            if let Some(string) = child.get_widget_name() {
                 if string == name {
                     return Some(child);
                 }
@@ -358,7 +360,7 @@ pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, nam
     }
     else if let Ok(bin) = parent.clone().dynamic_cast::<Bin>() {
         if let Some(child) = bin.get_child() {
-            if let Some(string) = child.get_name() {
+            if let Some(string) = child.get_widget_name() {
                 if string == name {
                     return Some(child);
                 }
