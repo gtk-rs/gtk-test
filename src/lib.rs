@@ -37,6 +37,7 @@
 
 extern crate enigo;
 extern crate gdk;
+extern crate glib;
 extern crate gtk;
 
 mod macros;
