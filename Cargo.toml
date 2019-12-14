@@ -17,6 +17,7 @@ travis-ci = { repository = "gtk-rs/gtk-test" }
 [dependencies]
 enigo = "^0.0.11"
 gdk = "0.12.0"
+glib = "0.9.0"
 gtk = "0.8.0"
 
 [[test]]
