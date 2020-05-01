@@ -21,7 +21,7 @@ pub fn init_ui() -> (Window, Label, Button) {
 
     let window = Window::new(WindowType::Toplevel);
     let b = gtk::Box::new(Orientation::Vertical, 0);
-    let label = Label::new("Test");
+    let label = Label::new(Some("Test"));
     let but = Button::new();
 
     let l = label.clone();
