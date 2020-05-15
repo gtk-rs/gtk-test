@@ -43,7 +43,7 @@ macro_rules! assert_label {
 #[macro_export]
 macro_rules! assert_text {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_text().expect("get text"), $string.to_string());
+        assert_eq!($widget.get_text(), $string.to_string());
     };
 }
 
@@ -93,7 +93,7 @@ macro_rules! assert_title {
 #[macro_export]
 macro_rules! assert_name {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_widget_name().expect("get text"), $string.to_string());
+        assert_eq!($widget.get_widget_name(), $string.to_string());
     };
 }
 

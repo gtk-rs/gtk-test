@@ -348,10 +348,8 @@ pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
 pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<Widget> {
     if let Ok(container) = parent.clone().dynamic_cast::<Container>() {
         for child in container.get_children() {
-            if let Some(string) = child.get_widget_name() {
-                if string == name {
-                    return Some(child);
-                }
+            if child.get_widget_name() == name {
+                return Some(child);
             }
             if let Some(widget) = find_widget_by_name(&child, name) {
                 return Some(widget);
@@ -360,10 +358,8 @@ pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, nam
     }
     else if let Ok(bin) = parent.clone().dynamic_cast::<Bin>() {
         if let Some(child) = bin.get_child() {
-            if let Some(string) = child.get_widget_name() {
-                if string == name {
-                    return Some(child);
-                }
+            if child.get_widget_name() == name {
+                return Some(child);
             }
             if let Some(widget) = find_widget_by_name(&child, name) {
                 return Some(widget);
@@ -596,7 +592,7 @@ fn gdk_key_to_enigo_key(key: Key) -> enigo::Key {
         key::space => Space,
         key::BackSpace => Backspace,
         key::Escape => Escape,
-        key::Super_L | key::Super_R => Super,
+        key::Super_L | key::Super_R => Meta,
         key::Control_L | key::Control_R => Control,
         key::Shift_L | key::Shift_R => Shift,
         key::Shift_Lock => CapsLock,
