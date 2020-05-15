@@ -303,14 +303,14 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Button, ContainerExt, WidgetExt, Window, WindowType};
+/// use gtk::{prelude::BuildableExtManual, Button, ContainerExt, WidgetExt, Window, WindowType};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
 /// let but = Button::new();
 /// let w = Window::new(WindowType::Toplevel);
 ///
-/// but.set_name("Button");
+/// but.set_widget_name("Button");
 /// w.add(&but);
 ///
 /// gtk_test::find_child_by_name::<Button, Window>(&w, "Button").expect("failed to find child");
@@ -339,7 +339,7 @@ pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
 /// let but = Button::new();
 /// let w = Window::new(WindowType::Toplevel);
 ///
-/// but.set_name("Button");
+/// but.set_widget_name("Button");
 /// w.add(&but);
 ///
 /// gtk_test::find_widget_by_name(&w, "Button").unwrap();
