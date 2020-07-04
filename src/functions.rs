@@ -6,7 +6,8 @@ use enigo::{
     MouseControllable,
 };
 use gdk::{WindowExt, keyval_to_unicode};
-use gdk::enums::key::{self, Key};
+use gdk::keys::Key;
+use gdk::keys::constants as key;
 use glib::{
     Cast,
     Continue,
@@ -241,7 +242,7 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// entry.connect_preedit_changed(|_, _| {
 ///     println!("key entered");
 /// });
-/// gtk_test::enter_key(&entry, gdk::enums::key::Agrave);
+/// gtk_test::enter_key(&entry, gdk::keys::constants::Agrave);
 /// # }
 /// ```
 pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
@@ -433,7 +434,7 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 ///     println!("key pressed");
 ///     Inhibit(false)
 /// });
-/// gtk_test::key_press(&entry, gdk::enums::key::Agrave);
+/// gtk_test::key_press(&entry, gdk::keys::constants::Agrave);
 /// # }
 /// ```
 pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
@@ -474,7 +475,7 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 ///     println!("key released");
 ///     Inhibit(false)
 /// });
-/// gtk_test::key_release(&entry, gdk::enums::key::Agrave);
+/// gtk_test::key_release(&entry, gdk::keys::constants::Agrave);
 /// # }
 /// ```
 pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
@@ -618,11 +619,11 @@ fn gdk_key_to_enigo_key(key: Key) -> enigo::Key {
         key::F11 => F11,
         key::F12 => F12,
         _ => {
-            if let Some(char) = keyval_to_unicode(key) {
+            if let Some(char) = keyval_to_unicode(*key) {
                 Layout(char)
             }
             else {
-                Raw(key as u16)
+                Raw(*key as u16)
             }
         },
     }
