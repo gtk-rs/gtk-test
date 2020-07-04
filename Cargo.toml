@@ -1,6 +1,6 @@
 [package]
 name = "gtk-test"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
 description = "Crate to test GTK UIs"
@@ -16,9 +16,9 @@ travis-ci = { repository = "gtk-rs/gtk-test" }
 
 [dependencies]
 enigo = "^0.0.14"
-gdk = "0.12.0"
-glib = "0.9.0"
-gtk = "0.8.0"
+gdk = "0.13.0"
+glib = "0.10.0"
+gtk = "0.9.0"
 
 [[test]]
 harness = false
