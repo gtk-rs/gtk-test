@@ -36,14 +36,14 @@ macro_rules! assert_label {
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
-/// let label = Label::new("I'm a label!");
+/// let label = Label::new(Some("I'm a label!"));
 /// assert_text!(label, "I'm a label!");
 /// # }
 /// ```
 #[macro_export]
 macro_rules! assert_text {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_text().expect("get text"), $string.to_string());
+        assert_eq!($widget.get_text(), $string.to_string());
     };
 }
 
@@ -86,14 +86,14 @@ macro_rules! assert_title {
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
 /// let button = Button::new();
-/// button.set_name("Omelette");
+/// button.set_widget_name("Omelette");
 /// assert_name!(button, "Omelette");
 /// # }
 /// ```
 #[macro_export]
 macro_rules! assert_name {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_name().expect("get text"), $string.to_string());
+        assert_eq!($widget.get_widget_name(), $string.to_string());
     };
 }
 
