@@ -6,7 +6,7 @@ services:
 rust:
   - nightly
   - beta
-  - 1.31.0 # stable
+  - 1.40.0 # stable
 
 env:
   - GTK=3.14
@@ -25,6 +25,7 @@ addons:
       - libxtst-dev
       - at-spi2-core
       - openbox
+      - libxdo-dev
 
 before_script:
   - openbox & # needs a window manager for the tests (to get focus to work)
