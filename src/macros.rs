@@ -140,6 +140,7 @@ macro_rules! assert_name {
 /// # }
 /// ```
 #[macro_export]
+// TODO: should remove the signal after wait()?
 macro_rules! observer_new {
     ($widget:expr, $signal_name:ident, |$e1:pat $(,$e:pat)*|) => {{
         let observer = $crate::Observer::new();
@@ -152,9 +153,9 @@ macro_rules! observer_new {
     ($widget:expr, $signal_name:ident, |$e1:pat $(,$e:pat)*| $block:block) => {{
         let observer = $crate::Observer::new();
         let res = (*observer.get_inner()).clone();
-        $widget.$signal_name(move |$e1 $(,$e:expr)*| {
-            let _ = $block;
+        $widget.$signal_name(move |$e1 $(,$e)*| {
             *res.borrow_mut() = true;
+            $block
         });
         observer
     }}
