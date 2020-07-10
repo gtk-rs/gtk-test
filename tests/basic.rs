@@ -46,6 +46,5 @@ fn main() {
     assert_text!(l, "Test");
     w.activate_focus();
     gtk_test::click(&b);
-    gtk_test::wait(1000); // to be sure that GTK has updated the label's text
     assert_text!(l, "Clicked");
 }

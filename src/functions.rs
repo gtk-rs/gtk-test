@@ -19,14 +19,21 @@ use gtk::{
     self,
     Bin,
     BinExt,
+    Button,
+    ButtonExt,
     Container,
     ContainerExt,
     EditableExt,
     Entry,
+    Inhibit,
+    ToolButton,
+    ToolButtonExt,
     Widget,
     WidgetExt,
     Window,
 };
+
+use ::observer_new;
 
 /// Simulate a click on a widget.
 ///
@@ -57,13 +64,22 @@ use gtk::{
 /// gtk_test::click(&but);
 /// # }
 /// ```
-pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
+pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: &W) {
     wait_for_draw(widget, || {
+        let observer = if let Ok(tool_button) = widget.clone().dynamic_cast::<ToolButton>() {
+            observer_new!(tool_button, connect_clicked, |_|)
+        } else if let Ok(tool_button) = widget.clone().dynamic_cast::<Button>() {
+            observer_new!(tool_button, connect_clicked, |_|)
+        } else {
+            observer_new!(widget, connect_button_release_event, |_, _| {
+                Inhibit(false)
+            })
+        };
         let allocation = widget.get_allocation();
         mouse_move(widget, allocation.width / 2, allocation.height / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
-        run_loop();
+        observer.wait();
     });
 }
 
@@ -97,8 +113,18 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// # }
 /// ```
 pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
-    click(widget);
-    click(widget);
+    wait_for_draw(widget, || {
+        let observer = observer_new!(widget, connect_button_release_event, |_, _| {
+            Inhibit(false)
+        });
+        let allocation = widget.get_allocation();
+        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        let mut enigo = Enigo::new();
+        enigo.mouse_click(MouseButton::Left);
+        run_loop();
+        enigo.mouse_click(MouseButton::Left);
+        observer.wait();
+    });
 }
 
 /// Move the mouse relative to the widget position.
@@ -247,10 +273,13 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// ```
 pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
+        let observer = observer_new!(widget, connect_key_release_event, |_, _| {
+            Inhibit(false)
+        });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_click(gdk_key_to_enigo_key(key));
-        run_loop();
+        observer.wait();
     });
 }
 
@@ -289,8 +318,11 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
         focus(widget);
         let mut enigo = Enigo::new();
         for char in text.chars() {
+            let observer = observer_new!(widget, connect_key_release_event, |_, _| {
+                Inhibit(false)
+            });
             enigo.key_sequence(&char.to_string());
-            run_loop();
+            observer.wait();
         }
     });
 }
@@ -437,12 +469,16 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// gtk_test::key_press(&entry, gdk::keys::constants::Agrave);
 /// # }
 /// ```
+// FIXME: don't wait the observer for modifier keys like shift?
 pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
+        let observer = observer_new!(widget, connect_key_press_event, |_, _| {
+            Inhibit(false)
+        });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_down(gdk_key_to_enigo_key(key));
-        run_loop();
+        observer.wait();
     });
 }
 
@@ -480,10 +516,13 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// ```
 pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
+        let observer = observer_new!(widget, connect_key_release_event, |_, _| {
+            Inhibit(false)
+        });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_up(gdk_key_to_enigo_key(key));
-        run_loop();
+        observer.wait();
     });
 }
 
@@ -598,6 +637,7 @@ fn gdk_key_to_enigo_key(key: Key) -> enigo::Key {
         key::Shift_L | key::Shift_R => Shift,
         key::Shift_Lock => CapsLock,
         key::Alt_L | key::Alt_R => Alt,
+        key::End => End,
         key::Option => Option,
         key::Home => Home,
         key::Page_Down => PageDown,
