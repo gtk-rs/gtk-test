@@ -5,7 +5,6 @@ use enigo::{
     MouseButton,
     MouseControllable,
 };
-use gdk::{WindowExt, keyval_to_unicode};
 use gdk::keys::Key;
 use gdk::keys::constants as key;
 use glib::{
@@ -18,19 +17,19 @@ use glib::{
 use gtk::{
     self,
     Bin,
-    BinExt,
     Button,
-    ButtonExt,
     Container,
-    ContainerExt,
-    EditableExt,
     Entry,
     Inhibit,
     ToolButton,
-    ToolButtonExt,
     Widget,
-    WidgetExt,
     Window,
+    prelude::BinExt,
+    prelude::ButtonExt,
+    prelude::ContainerExt,
+    prelude::EditableExt,
+    prelude::ToolButtonExt,
+    prelude::WidgetExt,
 };
 
 use ::observer_new;
@@ -53,7 +52,7 @@ use ::observer_new;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Button, ButtonExt};
+/// use gtk::{Button, prelude::ButtonExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -75,7 +74,7 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: 
                 Inhibit(false)
             })
         };
-        let allocation = widget.get_allocation();
+        let allocation = widget.allocation();
         mouse_move(widget, allocation.width / 2, allocation.height / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
@@ -101,7 +100,7 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: 
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{FileChooserAction, FileChooserWidget, FileChooserExt};
+/// use gtk::{FileChooserAction, FileChooserWidget, prelude::FileChooserExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -117,7 +116,7 @@ pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W
         let observer = observer_new!(widget, connect_button_release_event, |_, _| {
             Inhibit(false)
         });
-        let allocation = widget.get_allocation();
+        let allocation = widget.allocation();
         mouse_move(widget, allocation.width / 2, allocation.height / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
@@ -146,9 +145,9 @@ pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W
 /// ```
 pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, y: i32) {
     wait_for_draw(widget, || {
-        let toplevel_window = widget.get_toplevel().and_then(|toplevel| toplevel.get_window());
-        if let (Some(toplevel), Some(toplevel_window)) = (widget.get_toplevel(), toplevel_window) {
-            let (_, window_x, window_y) = toplevel_window.get_origin();
+        let toplevel_window = widget.toplevel().and_then(|toplevel| toplevel.window());
+        if let (Some(toplevel), Some(toplevel_window)) = (widget.toplevel(), toplevel_window) {
+            let (_, window_x, window_y) = toplevel_window.origin();
             if let Some((x, y)) = widget.translate_coordinates(&toplevel, x, y) {
                 let x = window_x + x;
                 let y = window_y + y;
@@ -179,7 +178,7 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, EntryExt};
+/// use gtk::{Entry, prelude::EntryExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -192,7 +191,7 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
 /// ```
 pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
-        let allocation = widget.get_allocation();
+        let allocation = widget.allocation();
         mouse_move(widget, allocation.width / 2, allocation.height / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_down(MouseButton::Left);
@@ -219,7 +218,7 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, EntryExt};
+/// use gtk::{Entry, prelude::EntryExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -232,7 +231,7 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// ```
 pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
-        let allocation = widget.get_allocation();
+        let allocation = widget.allocation();
         mouse_move(widget, allocation.width / 2, allocation.height / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_up(MouseButton::Left);
@@ -260,7 +259,7 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, EntryExt};
+/// use gtk::{Entry, prelude::EntryExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -302,7 +301,7 @@ pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, EntryExt};
+/// use gtk::{Entry, prelude::EntryExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -336,7 +335,7 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{prelude::BuildableExtManual, Button, ContainerExt, WidgetExt, Window, WindowType};
+/// use gtk::{prelude::BuildableExtManual, Button, prelude::ContainerExt, prelude::WidgetExt, Window, WindowType};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -365,7 +364,7 @@ pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Button, ContainerExt, WidgetExt, Window, WindowType};
+/// use gtk::{Button, prelude::ContainerExt, prelude::WidgetExt, Window, WindowType};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -380,8 +379,8 @@ pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
 /// ```
 pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<Widget> {
     if let Ok(container) = parent.clone().dynamic_cast::<Container>() {
-        for child in container.get_children() {
-            if child.get_widget_name() == name {
+        for child in container.children() {
+            if child.widget_name() == name {
                 return Some(child);
             }
             if let Some(widget) = find_widget_by_name(&child, name) {
@@ -390,8 +389,8 @@ pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, nam
         }
     }
     else if let Ok(bin) = parent.clone().dynamic_cast::<Bin>() {
-        if let Some(child) = bin.get_child() {
-            if child.get_widget_name() == name {
+        if let Some(child) = bin.child() {
+            if child.widget_name() == name {
                 return Some(child);
             }
             if let Some(widget) = find_widget_by_name(&child, name) {
@@ -411,7 +410,7 @@ pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, nam
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Button, Inhibit, WidgetExt};
+/// use gtk::{Button, Inhibit, prelude::WidgetExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -457,7 +456,7 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, Inhibit, WidgetExt};
+/// use gtk::{Entry, Inhibit, prelude::WidgetExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -502,7 +501,7 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, Inhibit, WidgetExt};
+/// use gtk::{Entry, Inhibit, prelude::WidgetExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -542,7 +541,7 @@ pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W,
 /// # }
 /// ```
 pub fn wait(ms: u32) {
-    gtk::timeout_add(ms, || {
+    glib::timeout_add(std::time::Duration::from_millis(ms as u64), || {
         gtk::main_quit();
         Continue(false)
     });
@@ -603,7 +602,7 @@ pub fn wait_until_done<F: FnMut() -> bool>(mut f: F) {
 /// extern crate gtk;
 /// extern crate gtk_test;
 ///
-/// use gtk::{WidgetExt, Window, WindowType};
+/// use gtk::{prelude::WidgetExt, Window, WindowType};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -617,7 +616,7 @@ pub fn wait_until_done<F: FnMut() -> bool>(mut f: F) {
 /// ```
 pub fn wait_for_draw<W, F: FnOnce()>(widget: &W, callback: F)
 where W: IsA<Object> + IsA<Widget> + WidgetExt {
-    if widget.get_ancestor(Window::static_type()).is_none() {
+    if widget.ancestor(Window::static_type()).is_none() {
         return;
     }
     gtk::test_widget_wait_for_draw(widget);
@@ -659,7 +658,7 @@ fn gdk_key_to_enigo_key(key: Key) -> enigo::Key {
         key::F11 => F11,
         key::F12 => F12,
         _ => {
-            if let Some(char) = keyval_to_unicode(*key) {
+            if let Some(char) = key.to_unicode() {
                 Layout(char)
             }
             else {

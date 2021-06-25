@@ -16,9 +16,9 @@ travis-ci = { repository = "gtk-rs/gtk-test" }
 
 [dependencies]
 enigo = "^0.0.14"
-gdk = { git = "https://github.com/gtk-rs/gdk" }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gtk = { git = "https://github.com/gtk-rs/gtk" }
+gdk = "^0.14.0"
+glib = "^0.14.0"
+gtk = "^0.14.0"
 
 [[test]]
 harness = false
