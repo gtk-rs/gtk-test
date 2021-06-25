@@ -7,7 +7,7 @@
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Button, ButtonExt, LabelExt};
+/// use gtk::{Button, prelude::ButtonExt, prelude::LabelExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -19,7 +19,7 @@
 #[macro_export]
 macro_rules! assert_label {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_label().expect("get label"), $string.to_string());
+        assert_eq!($widget.label().expect("get label"), $string.to_string());
     };
 }
 
@@ -32,7 +32,7 @@ macro_rules! assert_label {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Label, LabelExt};
+/// use gtk::{Label, prelude::LabelExt};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -43,7 +43,7 @@ macro_rules! assert_label {
 #[macro_export]
 macro_rules! assert_text {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_text(), $string.to_string());
+        assert_eq!($widget.text(), $string.to_string());
     };
 }
 
@@ -56,7 +56,7 @@ macro_rules! assert_text {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{GtkWindowExt, Window, WindowType};
+/// use gtk::{prelude::GtkWindowExt, Window, WindowType};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -68,7 +68,7 @@ macro_rules! assert_text {
 #[macro_export]
 macro_rules! assert_title {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_title().expect("get text"), $string.to_string());
+        assert_eq!($widget.title().expect("get text"), $string.to_string());
     };
 }
 
@@ -81,7 +81,7 @@ macro_rules! assert_title {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{WidgetExt, Button};
+/// use gtk::{prelude::WidgetExt, Button};
 ///
 /// # fn main() {
 /// gtk::init().expect("GTK init failed");
@@ -93,7 +93,7 @@ macro_rules! assert_title {
 #[macro_export]
 macro_rules! assert_name {
     ($widget:expr, $string:expr) => {
-        assert_eq!($widget.get_widget_name(), $string.to_string());
+        assert_eq!($widget.widget_name(), $string.to_string());
     };
 }
 
@@ -106,7 +106,7 @@ macro_rules! assert_name {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::GtkWindowExt;
+/// use gtk::prelude::GtkWindowExt;
 ///
 /// # fn main() {
 /// gtk::init().expect("initialization failed");
@@ -125,7 +125,7 @@ macro_rules! assert_name {
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::GtkWindowExt;
+/// use gtk::prelude::GtkWindowExt;
 ///
 /// # fn main() {
 /// gtk::init().expect("initialization failed");

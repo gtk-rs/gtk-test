@@ -3,9 +3,9 @@ extern crate gtk;
 extern crate gtk_test;
 
 use gtk::{
-    GtkWindowExt,
     Window,
     WindowType,
+    prelude::GtkWindowExt,
 };
 
 fn main() {

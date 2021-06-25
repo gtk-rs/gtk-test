@@ -11,7 +11,7 @@
 //! #[macro_use]
 //! extern crate gtk_test;
 //!
-//! use gtk::{ButtonExt, ContainerExt, GtkWindowExt, LabelExt, WidgetExt};
+//! use gtk::{prelude::ButtonExt, prelude::ContainerExt, prelude::GtkWindowExt, prelude::LabelExt, prelude::WidgetExt};
 //!
 //! # fn main() {
 //! gtk::init().expect("GTK init failed");

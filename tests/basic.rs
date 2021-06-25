@@ -4,16 +4,16 @@ extern crate gtk_test;
 
 use gtk::{
     Button,
-    ButtonExt,
-    ContainerExt,
-    GtkWindowExt,
     Inhibit,
     Label,
-    LabelExt,
     Orientation,
-    WidgetExt,
     Window,
     WindowType,
+    prelude::ButtonExt,
+    prelude::ContainerExt,
+    prelude::GtkWindowExt,
+    prelude::LabelExt,
+    prelude::WidgetExt,
 };
 
 pub fn init_ui() -> (Window, Label, Button) {
