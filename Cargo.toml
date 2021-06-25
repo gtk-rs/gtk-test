@@ -10,15 +10,11 @@ repository = "https://github.com/gtk-rs/gtk-test"
 keywords = ["gtk", "gtk-rs", "GUI", "test", "gnome"]
 documentation = "https://docs.rs/gtk-test"
 
-[badges]
-appveyor = { repository = "GuillaumeGomez/gtk-test", service = "github" }
-travis-ci = { repository = "gtk-rs/gtk-test" }
-
 [dependencies]
 enigo = "^0.0.14"
-gdk = { git = "https://github.com/gtk-rs/gdk" }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gtk = { git = "https://github.com/gtk-rs/gtk" }
+gdk = { git = "https://github.com/gtk3-rs/gdk" }
+glib = { git = "https://github.com/gtk-rs-core/glib" }
+gtk = { git = "https://github.com/gtk3-rs/gtk" }
 
 [[test]]
 harness = false
