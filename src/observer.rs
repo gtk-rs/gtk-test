@@ -12,7 +12,7 @@ use std::rc::Rc;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::GtkWindowExt;
+/// use gtk::prelude::GtkWindowExt;
 ///
 /// # fn main() {
 /// gtk::init().expect("initialization failed");
@@ -39,7 +39,7 @@ impl Observer {
     /// #[macro_use]
     /// extern crate gtk_test;
     ///
-    /// use gtk::GtkWindowExt;
+    /// use gtk::prelude::GtkWindowExt;
     ///
     /// # fn main() {
     /// gtk::init().expect("GTK init failed");
@@ -74,7 +74,7 @@ impl Observer {
     /// #[macro_use]
     /// extern crate gtk_test;
     ///
-    /// use gtk::GtkWindowExt;
+    /// use gtk::prelude::GtkWindowExt;
     ///
     /// # fn main() {
     /// gtk::init().expect("initialization failed");
