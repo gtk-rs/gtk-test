@@ -1,38 +1,14 @@
-use enigo::{
-    self,
-    Enigo,
-    KeyboardControllable,
-    MouseButton,
-    MouseControllable,
-};
-use gdk::keys::Key;
+use enigo::{self, Enigo, KeyboardControllable, MouseButton, MouseControllable};
 use gdk::keys::constants as key;
-use glib::{
-    Cast,
-    Continue,
-    IsA,
-    Object,
-    StaticType,
-};
+use gdk::keys::Key;
+use glib::{Cast, Continue, IsA, Object, StaticType};
 use gtk::{
-    self,
-    Bin,
-    Button,
-    Container,
-    Entry,
-    Inhibit,
-    ToolButton,
-    Widget,
-    Window,
-    prelude::BinExt,
-    prelude::ButtonExt,
-    prelude::ContainerExt,
-    prelude::EditableExt,
-    prelude::ToolButtonExt,
-    prelude::WidgetExt,
+    self, prelude::BinExt, prelude::ButtonExt, prelude::ContainerExt, prelude::EditableExt,
+    prelude::ToolButtonExt, prelude::WidgetExt, Bin, Button, Container, Entry, Inhibit, ToolButton,
+    Widget, Window,
 };
 
-use ::observer_new;
+use observer_new;
 
 /// Simulate a click on a widget.
 ///
@@ -272,9 +248,7 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// ```
 pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
-        let observer = observer_new!(widget, connect_key_release_event, |_, _| {
-            Inhibit(false)
-        });
+        let observer = observer_new!(widget, connect_key_release_event, |_, _| { Inhibit(false) });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_click(gdk_key_to_enigo_key(key));
@@ -317,9 +291,8 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
         focus(widget);
         let mut enigo = Enigo::new();
         for char in text.chars() {
-            let observer = observer_new!(widget, connect_key_release_event, |_, _| {
-                Inhibit(false)
-            });
+            let observer =
+                observer_new!(widget, connect_key_release_event, |_, _| { Inhibit(false) });
             enigo.key_sequence(&char.to_string());
             observer.wait();
         }
@@ -350,9 +323,11 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
 /// let but: Button = gtk_test::find_child_by_name(&w, "Button").expect("failed to find child");
 /// # }
 /// ```
-pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<C> {
-    find_widget_by_name(parent, name)
-        .and_then(|widget| widget.downcast().ok())
+pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
+    parent: &W,
+    name: &str,
+) -> Option<C> {
+    find_widget_by_name(parent, name).and_then(|widget| widget.downcast().ok())
 }
 
 /// Returns the child widget which has the given name.
@@ -377,7 +352,10 @@ pub fn find_child_by_name<C: IsA<Widget>, W: Clone + IsA<Object> + IsA<Widget>>(
 /// gtk_test::find_widget_by_name(&w, "Button").unwrap();
 /// # }
 /// ```
-pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, name: &str) -> Option<Widget> {
+pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(
+    parent: &W,
+    name: &str,
+) -> Option<Widget> {
     if let Ok(container) = parent.clone().dynamic_cast::<Container>() {
         for child in container.children() {
             if child.widget_name() == name {
@@ -387,8 +365,7 @@ pub fn find_widget_by_name<W: Clone + IsA<Object> + IsA<Widget>>(parent: &W, nam
                 return Some(widget);
             }
         }
-    }
-    else if let Ok(bin) = parent.clone().dynamic_cast::<Bin>() {
+    } else if let Ok(bin) = parent.clone().dynamic_cast::<Bin>() {
         if let Some(child) = bin.child() {
             if child.widget_name() == name {
                 return Some(child);
@@ -471,9 +448,7 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 // FIXME: don't wait the observer for modifier keys like shift?
 pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
-        let observer = observer_new!(widget, connect_key_press_event, |_, _| {
-            Inhibit(false)
-        });
+        let observer = observer_new!(widget, connect_key_press_event, |_, _| { Inhibit(false) });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_down(gdk_key_to_enigo_key(key));
@@ -515,9 +490,7 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// ```
 pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
-        let observer = observer_new!(widget, connect_key_release_event, |_, _| {
-            Inhibit(false)
-        });
+        let observer = observer_new!(widget, connect_key_release_event, |_, _| { Inhibit(false) });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_up(gdk_key_to_enigo_key(key));
@@ -615,7 +588,9 @@ pub fn wait_until_done<F: FnMut() -> bool>(mut f: F) {
 /// # }
 /// ```
 pub fn wait_for_draw<W, F: FnOnce()>(widget: &W, callback: F)
-where W: IsA<Object> + IsA<Widget> + WidgetExt {
+where
+    W: IsA<Object> + IsA<Widget> + WidgetExt,
+{
     if widget.ancestor(Window::static_type()).is_none() {
         return;
     }
@@ -660,10 +635,9 @@ fn gdk_key_to_enigo_key(key: Key) -> enigo::Key {
         _ => {
             if let Some(char) = key.to_unicode() {
                 Layout(char)
-            }
-            else {
+            } else {
                 Raw(*key as u16)
             }
-        },
+        }
     }
 }

@@ -37,8 +37,8 @@
 
 extern crate enigo;
 extern crate gtk;
-use gtk::gdk as gdk;
-use gtk::glib as glib;
+use gtk::gdk;
+use gtk::glib;
 
 mod macros;
 

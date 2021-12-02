@@ -88,11 +88,17 @@ impl Observer {
     pub fn wait(&self) {
         loop {
             if let Ok(ref result) = self.result.try_borrow() {
-                if **result == true {
-                    break
+                if **result {
+                    break;
                 }
             }
             ::run_loop();
         }
+    }
+}
+
+impl Default for Observer {
+    fn default() -> Self {
+        Self::new()
     }
 }
