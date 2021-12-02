@@ -75,7 +75,7 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: 
             })
         };
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
         observer.wait();
@@ -117,7 +117,7 @@ pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W
             Inhibit(false)
         });
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
         run_loop();
@@ -192,7 +192,7 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
 pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_down(MouseButton::Left);
         run_loop();
@@ -232,7 +232,7 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_up(MouseButton::Left);
         run_loop();
@@ -254,8 +254,8 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// Example:
 ///
 /// ```
-/// extern crate gdk;
 /// extern crate gtk;
+/// use gtk::gdk as gdk;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
@@ -451,8 +451,8 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// Example:
 ///
 /// ```
-/// extern crate gdk;
 /// extern crate gtk;
+/// use gtk::gdk as gdk;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
@@ -496,8 +496,8 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// Example:
 ///
 /// ```
-/// extern crate gdk;
 /// extern crate gtk;
+/// use gtk::gdk as gdk;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
