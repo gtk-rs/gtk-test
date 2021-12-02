@@ -32,10 +32,18 @@ jobs:
         with:
           command: check
           
+      - name: Setup OpenBox environment.
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+                openbox &
+          fi
+        shell: bash
+          
       - name: Run Tests
         uses: actions-rs/cargo@v1
         with:
           command: test
+          args: -- --test-threads=1
 
   clippy_check:
     runs-on: ubuntu-latest
