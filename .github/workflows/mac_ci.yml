@@ -1,0 +1,36 @@
+on: [push]
+
+name: MacOS CI
+
+jobs:
+  check:
+    name: Compile and Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install gtk3 and dependencies.
+        run: brew install gtk+3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      
+      - name: Check Code
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+      - name: Install Clippy
+        run: rustup component add clippy
+
+      - name: Run Clippy
+        run: cargo clippy --all-targets -- -D warnings -A unknown-lints
+          
+      - name: Run Tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: -- --test-threads=1
