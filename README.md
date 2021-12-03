@@ -1,4 +1,4 @@
-# gtk-test [![Build Status](https://travis-ci.org/gtk-rs/gtk-test.png?branch=master)](https://travis-ci.org/gtk-rs/gtk-test) [![Build status](https://ci.appveyor.com/api/projects/status/h72xnw2ghjpy2m9y/branch/master?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk-test/branch/master)
+# gtk-test
 
 This projects allows you to test your GTK's applications UI. It has to be used with [gtk-rs](https://gtk-rs.org) crates.
 
@@ -66,26 +66,20 @@ You can find a few in the tests folder. Just copy/paste it and you're good to go
 
 ### Using it on CI?
 
-It's actually possible (only tested for travis though). You "just" need a window manager. Here's what you have to ad in your Ci configuration file to make it work:
+It's actually possible (only tested for GitHub Actions though). You "just" need a display server. Here's what you have to add in your CI configuration file to make it work:
 
 Install the following packages:
 
- * libcurl4-openssl-dev
- * libelf-dev
- * libdw-dev
- * binutils-dev
- * libsoup2.4-dev
- * libxtst-dev
- * at-spi2-core
- * openbox
+ * libgtk-3-dev
+ * libxdo-dev
 
-Then you to execute the following commands:
+Then run the application in a virtual display environment using [xvfb-action.](https://github.com/GabrielBB/xvfb-action) For example:
 
 ```
-> "export DISPLAY=:99.0"
-> "sh -e /etc/init.d/xvfb start"
-> sleep 3 # give xvfb some time to start
-> openbox &
+- name: Run headless test
+  uses: GabrielBB/xvfb-action@v1
+  with:
+    run: cargo test -- --test-threads=1
 ```
 
-Take a look at our `.travis.yml` file to see how we set things up.
+Take a look at our `.github/workflows/linux_ci.yml` file to see how we set things up.
