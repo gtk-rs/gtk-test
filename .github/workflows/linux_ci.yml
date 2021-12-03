@@ -12,17 +12,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install \
-            menu \
-            libcurl4-openssl-dev \
-            libelf-dev \
-            libdw-dev \
-            binutils-dev \
             libgtk-3-dev \
-            libmount-dev \
-            libsoup2.4-dev \
-            libxtst-dev \
-            at-spi2-core \
-            openbox \
             libxdo-dev
 
       - name: Install Rust
@@ -44,14 +34,7 @@ jobs:
           args: --all-features
           name: Linux CI
           
-      - name: Setup OpenBox environment.
-        run: |
-              Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
-              export DISPLAY=:99
-              openbox &
-          
-      - name: Run Tests
-        uses: actions-rs/cargo@v1
+      - name: Run headless test
+        uses: GabrielBB/xvfb-action@v1
         with:
-          command: test
-          args: -- --test-threads=1
+          run: cargo test -- --test-threads=1
