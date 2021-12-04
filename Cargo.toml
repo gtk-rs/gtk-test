@@ -12,8 +12,7 @@ documentation = "https://docs.rs/gtk-test"
 
 [dependencies]
 enigo = "^0.0.14"
-glib = "^0.14.0"
-gtk = "^0.14.0"
+gtk = { git = "https://github.com/gtk-rs/gtk3-rs" }
 
 [[test]]
 harness = false
