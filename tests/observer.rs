@@ -2,11 +2,7 @@ extern crate gtk;
 #[macro_use]
 extern crate gtk_test;
 
-use gtk::{
-    Window,
-    WindowType,
-    prelude::GtkWindowExt,
-};
+use gtk::{prelude::GtkWindowExt, Window, WindowType};
 
 fn main() {
     gtk::init().expect("initialization failed");

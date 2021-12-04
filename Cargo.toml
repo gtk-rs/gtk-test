@@ -1,6 +1,6 @@
 [package]
 name = "gtk-test"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
 description = "Crate to test GTK UIs"
@@ -12,9 +12,8 @@ documentation = "https://docs.rs/gtk-test"
 
 [dependencies]
 enigo = "^0.0.14"
-gdk = { git = "https://github.com/gtk3-rs/gdk" }
-glib = { git = "https://github.com/gtk-rs-core/glib" }
-gtk = { git = "https://github.com/gtk3-rs/gtk" }
+glib = "^0.14.0"
+gtk = "^0.14.0"
 
 [[test]]
 harness = false

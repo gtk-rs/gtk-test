@@ -36,9 +36,9 @@
 //! ```
 
 extern crate enigo;
-extern crate gdk;
-extern crate glib;
 extern crate gtk;
+use gtk::gdk;
+use gtk::glib;
 
 mod macros;
 
