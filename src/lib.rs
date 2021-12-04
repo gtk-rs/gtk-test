@@ -35,11 +35,6 @@
 //! # }
 //! ```
 
-extern crate enigo;
-extern crate gtk;
-use gtk::gdk;
-use gtk::glib;
-
 mod macros;
 
 mod functions;

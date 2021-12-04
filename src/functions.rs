@@ -2,8 +2,10 @@ use enigo::{self, Enigo, KeyboardControllable, MouseButton, MouseControllable};
 use gtk::gdk::keys::constants as key;
 use gtk::gdk::keys::Key;
 use gtk::glib::{Cast, Continue, IsA, Object, StaticType};
+use gtk::prelude::{BinExt, ButtonExt, ContainerExt, EditableExt, ToolButtonExt, WidgetExt};
+use gtk::{Bin, Button, Container, Entry, Inhibit, ToolButton, Widget, Window};
 
-use observer_new;
+use crate::observer_new;
 
 /// Simulate a click on a widget.
 ///
@@ -46,7 +48,7 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: 
             })
         };
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
         observer.wait();
@@ -88,7 +90,7 @@ pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W
             Inhibit(false)
         });
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
         run_loop();
@@ -163,7 +165,7 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
 pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_down(MouseButton::Left);
         run_loop();
@@ -203,7 +205,7 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_up(MouseButton::Left);
         run_loop();
