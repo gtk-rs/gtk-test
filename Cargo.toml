@@ -1,6 +1,6 @@
 [package]
 name = "gtk-test"
-version = "0.6.1"
+version = "0.7.0"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
 description = "Crate to test GTK UIs"
@@ -9,11 +9,11 @@ homepage = "https://gtk-rs.org/"
 repository = "https://github.com/gtk-rs/gtk-test"
 keywords = ["gtk", "gtk-rs", "GUI", "test", "gnome"]
 documentation = "https://docs.rs/gtk-test"
+edition = "2021"
 
 [dependencies]
 enigo = "^0.0.14"
-glib = "^0.14.0"
-gtk = "^0.14.0"
+gtk = { git = "https://github.com/gtk-rs/gtk3-rs" }
 
 [[test]]
 harness = false

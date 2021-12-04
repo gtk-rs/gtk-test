@@ -1,14 +1,11 @@
 use enigo::{self, Enigo, KeyboardControllable, MouseButton, MouseControllable};
-use gdk::keys::constants as key;
-use gdk::keys::Key;
-use glib::{Cast, Continue, IsA, Object, StaticType};
-use gtk::{
-    self, prelude::BinExt, prelude::ButtonExt, prelude::ContainerExt, prelude::EditableExt,
-    prelude::ToolButtonExt, prelude::WidgetExt, Bin, Button, Container, Entry, Inhibit, ToolButton,
-    Widget, Window,
-};
+use gtk::gdk::keys::constants as key;
+use gtk::gdk::keys::Key;
+use gtk::glib::{Cast, Continue, IsA, Object, StaticType};
+use gtk::prelude::{BinExt, ButtonExt, ContainerExt, EditableExt, ToolButtonExt, WidgetExt};
+use gtk::{Bin, Button, Container, Entry, Inhibit, ToolButton, Widget, Window};
 
-use observer_new;
+use crate::observer_new;
 
 /// Simulate a click on a widget.
 ///
@@ -51,7 +48,7 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: 
             })
         };
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
         observer.wait();
@@ -93,7 +90,7 @@ pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W
             Inhibit(false)
         });
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_click(MouseButton::Left);
         run_loop();
@@ -168,7 +165,7 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
 pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_down(MouseButton::Left);
         run_loop();
@@ -208,7 +205,7 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
-        mouse_move(widget, allocation.width / 2, allocation.height / 2);
+        mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
         let mut enigo = Enigo::new();
         enigo.mouse_up(MouseButton::Left);
         run_loop();
@@ -230,20 +227,18 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// Example:
 ///
 /// ```
-/// extern crate gtk;
-/// use gtk::gdk as gdk;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, prelude::EntryExt};
+/// use gtk_test::gtk::{Entry, prelude::EntryExt};
 ///
 /// # fn main() {
-/// gtk::init().expect("GTK init failed");
+/// gtk_test::gtk::init().expect("GTK init failed");
 /// let entry = Entry::new();
 /// entry.connect_preedit_changed(|_, _| {
 ///     println!("key entered");
 /// });
-/// gtk_test::enter_key(&entry, gdk::keys::constants::Agrave);
+/// gtk_test::enter_key(&entry, gtk_test::gdk::keys::constants::Agrave);
 /// # }
 /// ```
 pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
@@ -428,21 +423,19 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// Example:
 ///
 /// ```
-/// extern crate gtk;
-/// use gtk::gdk as gdk;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, Inhibit, prelude::WidgetExt};
+/// use gtk_test::gtk::{Entry, Inhibit, prelude::WidgetExt};
 ///
 /// # fn main() {
-/// gtk::init().expect("GTK init failed");
+/// gtk_test::gtk::init().expect("GTK init failed");
 /// let entry = Entry::new();
 /// entry.connect_key_press_event(|_, _| {
 ///     println!("key pressed");
 ///     Inhibit(false)
 /// });
-/// gtk_test::key_press(&entry, gdk::keys::constants::Agrave);
+/// gtk_test::key_press(&entry, gtk_test::gdk::keys::constants::Agrave);
 /// # }
 /// ```
 // FIXME: don't wait the observer for modifier keys like shift?
@@ -471,21 +464,19 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// Example:
 ///
 /// ```
-/// extern crate gtk;
-/// use gtk::gdk as gdk;
 /// #[macro_use]
 /// extern crate gtk_test;
 ///
-/// use gtk::{Entry, Inhibit, prelude::WidgetExt};
+/// use gtk_test::gtk::{Entry, Inhibit, prelude::WidgetExt};
 ///
 /// # fn main() {
-/// gtk::init().expect("GTK init failed");
+/// gtk_test::gtk::init().expect("GTK init failed");
 /// let entry = Entry::new();
 /// entry.connect_key_release_event(|_, _| {
 ///     println!("key released");
 ///     Inhibit(false)
 /// });
-/// gtk_test::key_release(&entry, gdk::keys::constants::Agrave);
+/// gtk_test::key_release(&entry, gtk_test::gdk::keys::constants::Agrave);
 /// # }
 /// ```
 pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
@@ -514,7 +505,7 @@ pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W,
 /// # }
 /// ```
 pub fn wait(ms: u32) {
-    glib::timeout_add(std::time::Duration::from_millis(ms as u64), || {
+    gtk::glib::timeout_add(std::time::Duration::from_millis(ms as u64), || {
         gtk::main_quit();
         Continue(false)
     });

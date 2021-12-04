@@ -92,7 +92,7 @@ impl Observer {
                     break;
                 }
             }
-            ::run_loop();
+            crate::run_loop();
         }
     }
 }

@@ -35,15 +35,12 @@
 //! # }
 //! ```
 
-extern crate enigo;
-extern crate gtk;
-use gtk::gdk;
-use gtk::glib;
-
 mod macros;
 
 mod functions;
 mod observer;
 
 pub use functions::*;
+pub use gtk;
+pub use gtk::gdk;
 pub use observer::Observer;
