@@ -1,6 +1,6 @@
 [package]
 name = "gtk-test"
-version = "0.6.1"
+version = "0.7.0"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
 description = "Crate to test GTK UIs"
