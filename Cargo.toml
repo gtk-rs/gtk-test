@@ -9,6 +9,7 @@ homepage = "https://gtk-rs.org/"
 repository = "https://github.com/gtk-rs/gtk-test"
 keywords = ["gtk", "gtk-rs", "GUI", "test", "gnome"]
 documentation = "https://docs.rs/gtk-test"
+edition = "2021"
 
 [dependencies]
 enigo = "^0.0.14"
