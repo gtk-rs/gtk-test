@@ -13,7 +13,7 @@ edition = "2021"
 
 [dependencies]
 enigo = "^0.0.14"
-gtk = "0.15"
+gtk = "0.16"
 
 [[test]]
 harness = false
