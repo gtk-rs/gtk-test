@@ -1,6 +1,6 @@
 [package]
 name = "gtk-test"
-version = "0.16.0"
+version = "0.17.0"
 authors = ["The Gtk-rs Project Developers"]
 license = "MIT"
 description = "Crate to test GTK UIs"
@@ -13,7 +13,7 @@ edition = "2021"
 
 [dependencies]
 enigo = "^0.0.14"
-gtk = "0.16"
+gtk = "0.17"
 
 [[test]]
 harness = false
