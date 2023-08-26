@@ -243,7 +243,9 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 /// ```
 pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
-        let observer = observer_new!(widget, connect_key_release_event, |_, _| { Propagation::Stop });
+        let observer = observer_new!(widget, connect_key_release_event, |_, _| {
+            Propagation::Stop
+        });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_click(gdk_key_to_enigo_key(key));
@@ -286,8 +288,9 @@ pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, 
         focus(widget);
         let mut enigo = Enigo::new();
         for char in text.chars() {
-            let observer =
-                observer_new!(widget, connect_key_release_event, |_, _| { Propagation::Stop });
+            let observer = observer_new!(widget, connect_key_release_event, |_, _| {
+                Propagation::Stop
+            });
             enigo.key_sequence(&char.to_string());
             observer.wait();
         }
@@ -443,7 +446,9 @@ pub fn focus<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
 // FIXME: don't wait the observer for modifier keys like shift?
 pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
-        let observer = observer_new!(widget, connect_key_press_event, |_, _| { Propagation::Stop });
+        let observer = observer_new!(widget, connect_key_press_event, |_, _| {
+            Propagation::Stop
+        });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_down(gdk_key_to_enigo_key(key));
@@ -484,7 +489,9 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 /// ```
 pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, key: Key) {
     wait_for_draw(widget, || {
-        let observer = observer_new!(widget, connect_key_release_event, |_, _| { Propagation::Stop });
+        let observer = observer_new!(widget, connect_key_release_event, |_, _| {
+            Propagation::Stop
+        });
         focus(widget);
         let mut enigo = Enigo::new();
         enigo.key_up(gdk_key_to_enigo_key(key));
