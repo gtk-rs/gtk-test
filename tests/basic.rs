@@ -4,8 +4,9 @@ extern crate gtk_test;
 
 use gtk::{
     prelude::ButtonExt, prelude::ContainerExt, prelude::GtkWindowExt, prelude::LabelExt,
-    prelude::WidgetExt, Button, Inhibit, Label, Orientation, Window, WindowType,
+    prelude::WidgetExt, Button, Label, Orientation, Window, WindowType,
 };
+use gtk::glib::Propagation;
 
 pub fn init_ui() -> (Window, Label, Button) {
     gtk::init().unwrap();
@@ -26,7 +27,7 @@ pub fn init_ui() -> (Window, Label, Button) {
     window.show_all();
     window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        Inhibit(false)
+        Propagation::Stop
     });
     (window, label, but)
 }
