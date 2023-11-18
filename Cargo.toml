@@ -12,7 +12,7 @@ documentation = "https://docs.rs/gtk-test"
 edition = "2021"
 
 [dependencies]
-enigo = "^0.0.14"
+enigo = "0.2.0-rc2"
 gtk = "0.18"
 
 [[test]]

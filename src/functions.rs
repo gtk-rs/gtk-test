@@ -1,4 +1,7 @@
-use enigo::{self, Enigo, KeyboardControllable, MouseButton, MouseControllable};
+use enigo::{
+    Direction::{Click, Press, Release},
+    Enigo, Keyboard, Mouse,
+};
 use gtk::gdk::keys::constants as key;
 use gtk::gdk::keys::Key;
 use gtk::glib::{Cast, ControlFlow, IsA, Object, Propagation, StaticType};
@@ -49,8 +52,8 @@ pub fn click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt + IsA<W>>(widget: 
         };
         let allocation = widget.allocation();
         mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
-        let mut enigo = Enigo::new();
-        enigo.mouse_click(MouseButton::Left);
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.button(enigo::Button::Left, Click).unwrap();
         observer.wait();
     });
 }
@@ -91,10 +94,10 @@ pub fn double_click<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W
         });
         let allocation = widget.allocation();
         mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
-        let mut enigo = Enigo::new();
-        enigo.mouse_click(MouseButton::Left);
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.button(enigo::Button::Left, Click).unwrap();
         run_loop();
-        enigo.mouse_click(MouseButton::Left);
+        enigo.button(enigo::Button::Left, Click).unwrap();
         observer.wait();
     });
 }
@@ -124,8 +127,8 @@ pub fn mouse_move<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, x: i32, 
             if let Some((x, y)) = widget.translate_coordinates(&toplevel, x, y) {
                 let x = window_x + x;
                 let y = window_y + y;
-                let mut enigo = Enigo::new();
-                enigo.mouse_move_to(x, y);
+                let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+                enigo.move_mouse(x, y, enigo::Coordinate::Abs).unwrap();
                 run_loop();
             }
         }
@@ -166,8 +169,8 @@ pub fn mouse_press<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
         mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
-        let mut enigo = Enigo::new();
-        enigo.mouse_down(MouseButton::Left);
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.button(enigo::Button::Left, Press).unwrap();
         run_loop();
     });
 }
@@ -206,8 +209,8 @@ pub fn mouse_release<W: IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W) {
     wait_for_draw(widget, || {
         let allocation = widget.allocation();
         mouse_move(widget, allocation.width() / 2, allocation.height() / 2);
-        let mut enigo = Enigo::new();
-        enigo.mouse_up(MouseButton::Left);
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.button(enigo::Button::Left, Release).unwrap();
         run_loop();
     });
 }
@@ -247,8 +250,9 @@ pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
             Propagation::Stop
         });
         focus(widget);
-        let mut enigo = Enigo::new();
-        enigo.key_click(gdk_key_to_enigo_key(key));
+
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.key(gdk_key_to_enigo_key(key), Click).unwrap();
         observer.wait();
     });
 }
@@ -286,14 +290,14 @@ pub fn enter_key<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
 pub fn enter_keys<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, text: &str) {
     wait_for_draw(widget, || {
         focus(widget);
-        let mut enigo = Enigo::new();
-        for char in text.chars() {
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.text(text).unwrap();
+        /* for char in text.chars() {
             let observer = observer_new!(widget, connect_key_release_event, |_, _| {
                 Propagation::Stop
             });
-            enigo.key_sequence(&char.to_string());
             observer.wait();
-        }
+        }*/
     });
 }
 
@@ -450,8 +454,8 @@ pub fn key_press<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W, k
             Propagation::Stop
         });
         focus(widget);
-        let mut enigo = Enigo::new();
-        enigo.key_down(gdk_key_to_enigo_key(key));
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.key(gdk_key_to_enigo_key(key), Press).unwrap();
         observer.wait();
     });
 }
@@ -493,8 +497,8 @@ pub fn key_release<W: Clone + IsA<Object> + IsA<Widget> + WidgetExt>(widget: &W,
             Propagation::Stop
         });
         focus(widget);
-        let mut enigo = Enigo::new();
-        enigo.key_up(gdk_key_to_enigo_key(key));
+        let mut enigo = Enigo::new(&enigo::Settings::default()).unwrap();
+        enigo.key(gdk_key_to_enigo_key(key), Release).unwrap();
         observer.wait();
     });
 }
@@ -635,9 +639,9 @@ fn gdk_key_to_enigo_key(key: Key) -> enigo::Key {
         key::F12 => F12,
         _ => {
             if let Some(char) = key.to_unicode() {
-                Layout(char)
+                Unicode(char)
             } else {
-                Raw(*key as u16)
+                Other(*key)
             }
         }
     }
